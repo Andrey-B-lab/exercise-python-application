@@ -48,4 +48,4 @@ COPY app.py .
 EXPOSE 5000
 
 # Run the application.
-CMD ["gunicorn", "counter-service:app", "--bind", "0.0.0.0:5000", "--access-logfile", "-", "--error-logfile", "-"]
+CMD ["python", "app.py"]
