@@ -35,9 +35,9 @@ pipeline {
                 checkout scm   //ensure the code is on deploy-node-1
 
                 sh """
-                  kubectl apply -f k8s/deployment.yaml
-                  kubectl apply -f k8s/service.yaml
-                  kubectl apply -f k8s/ingress.yaml
+                  kubectl apply -f /home/ubuntu/jenkins_agent/workspace/exercise-python-application-pipeline/k8s/deployment.yaml
+                  kubectl apply -f /home/ubuntu/jenkins_agent/workspace/exercise-python-application-pipeline/k8s/service.yaml
+                  kubectl apply -f /home/ubuntu/jenkins_agent/workspace/exercise-python-application-pipeline/k8s/ingress.yaml
                 """
             }
         }
