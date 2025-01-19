@@ -16,13 +16,13 @@ pipeline {
             }
         }
 
-        stage('Checkout Source (Deploy Node)') {
-            agent { label 'deploy-node-1' }
-            steps {
-                // Pull the code on deploy-node-1
-                git branch: "${GIT_BRANCH}", url: "${GIT_URL}"
-            }
-        }
+//        stage('Checkout Source (Deploy Node)') {
+//            agent { label 'deploy-node-1' }
+//            steps {
+//                // Pull the code on deploy-node-1
+//                git branch: "${GIT_BRANCH}", url: "${GIT_URL}"
+//            }
+//        }
 
         stage('Build & Push Docker Image') {
             agent { label 'build-node-1' }
@@ -55,11 +55,11 @@ pipeline {
             agent { label 'deploy-node-1' }
             steps {
                 script {
-//                    checkout([
-//                        $class: 'GitSCM',
-//                        branches: [[name: "${GIT_BRANCH}"]],
-//                        userRemoteConfigs: [[url: "${GIT_URL}"]]
-//                    ])
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: "${GIT_BRANCH}"]],
+                        userRemoteConfigs: [[url: "${GIT_URL}"]]
+                    ])
                     
                     sh """
                       echo "Applying deployment.yml..."
