@@ -3,10 +3,8 @@ kind: Ingress
 metadata:
   name: python-flask-ingress
   namespace: default
-  annotations:
-    # Use the ingress-nginx controller
-    kubernetes.io/ingress.class: "nginx"
 spec:
+  ingressClassName: nginx
   rules:
     - host: exercise.python.application.com
       http:
