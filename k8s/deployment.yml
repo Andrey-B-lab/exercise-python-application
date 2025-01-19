@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: python-flask-demo
-        image: andreybyhalenko/exercise-python-application::latest
+        image: andreybyhalenko/exercise-python-application:latest
         resources:
           requests:
             memory: "64Mi"
