@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exercise-python-application
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: exercise-python-application
+  template:
+    metadata:
+      labels:
+        app: exercise-python-application
+    spec:
+      containers:
+      - name: python-flask-demo
+        image: andreybyhalenko/exercise-python-application::latest
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 5000

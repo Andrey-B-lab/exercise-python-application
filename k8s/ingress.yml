@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: python-flask-ingress
+  namespace: default
+  annotations:
+    # Use the ingress-nginx controller
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - host: exercise.python.application.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: exercise-python-application-service
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - exercise.python.application.com
+      secretName: my-tls-secret
