@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: exercise.python.application.com
+    - host: andreyaws.com
       http:
         paths:
           - path: /
@@ -18,5 +18,5 @@ spec:
                   number: 80
   tls:
     - hosts:
-        - exercise.python.application.com
+        - andreyaws.com
       secretName: my-tls-secret
