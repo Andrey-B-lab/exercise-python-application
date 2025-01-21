@@ -30,7 +30,8 @@ jobs:
     - name: Debug SARIF File
       run: cat snyk.sarif
     - name: Fix SARIF File
-      run: sed -i 's/"severity": null/"severity": 0/g' snyk.sarif
+      run: |
+        sed -i 's/"severity": null/"severity": 0/g' snyk.sarif
     - name: Upload result to GitHub Code Scanning
       uses: github/codeql-action/upload-sarif@v3
       with:
