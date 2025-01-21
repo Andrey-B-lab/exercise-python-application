@@ -9,7 +9,6 @@ pipeline {
         stage('Build & Push Docker Image') {
             agent { label 'build-node-1' }
             steps {
-                //ensure the code is on build-node-1
                 checkout scm
 
                 script {
@@ -32,12 +31,65 @@ pipeline {
         stage('Deploy') {
             agent { label 'deploy-node-1' }
             steps {
-                checkout scm   //ensure the code is on deploy-node-1
+                checkout scm
 
+                // Install Nginx and Certbot
+                sh """
+                  sudo apt update
+                  sudo apt install -y certbot python3-certbot-nginx nginx
+                """
+
+                // Configure Certbot for the domain (andreyexercise.com)
+                sh """
+                  sudo certbot --nginx -d andreyexercise.com --non-interactive --agree-tos --email byhalenko@gmail.com
+                """
+
+                // Add minikube Nginx configurations
+                sh '''
+                  cat <<EOF | sudo tee /etc/nginx/sites-available/minikube
+                  server {
+                      listen      443 ssl;
+                      server_name andreyexercise.com;
+
+                      ssl_certificate /etc/letsencrypt/live/andreyexercise.com/fullchain.pem;
+                      ssl_certificate_key /etc/letsencrypt/live/andreyexercise.com/privkey.pem;
+                      ssl_protocols TLSv1.2 TLSv1.3;
+                      ssl_prefer_server_ciphers on;
+
+                      location / {
+                          proxy_pass http://192.168.49.2:30443;
+                          proxy_set_header Host $host;
+                          proxy_set_header X-Real-IP $remote_addr;
+                          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                          proxy_set_header X-Forwarded-Proto $scheme;
+                      }
+                  }
+
+                  server {
+                      listen      80;
+                      server_name andreyexercise.com;
+
+                      # Redirect HTTP to HTTPS
+                      return 301 https://\$host\$request_uri;
+                  }
+                  EOF
+                '''
+
+                // Enable the minikube configuration
+                sh """
+                  sudo ln -s /etc/nginx/sites-available/minikube /etc/nginx/sites-enabled/
+                  sudo rm -f /etc/nginx/sites-enabled/default
+                """
+
+                // Restart Nginx
+                sh """
+                  sudo systemctl restart nginx
+                """
+
+                // Apply Kubernetes configurations
                 sh """
                   kubectl apply -f k8s/deployment.yml
                   kubectl apply -f k8s/service.yml
-                  kubectl apply -f k8s/ingress.yml
                 """
             }
         }
