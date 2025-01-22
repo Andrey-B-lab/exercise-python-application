@@ -47,6 +47,8 @@ pipeline {
 
                 // Add minikube Nginx configurations to sites-available
                 sh '''
+                  MINIKUBE_IP=$(minikube ip)
+                  
                   cat <<EOF | sudo tee /etc/nginx/sites-available/minikube
                   server {
                       listen      443 ssl;
@@ -58,7 +60,7 @@ pipeline {
                       ssl_prefer_server_ciphers on;
 
                       location / {
-                          proxy_pass http://192.168.49.2:30443;
+                          proxy_pass http://${MINIKUBE_IP}:30443;
                           proxy_set_header Host $host;
                           proxy_set_header X-Real-IP $remote_addr;
                           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
