@@ -17,6 +17,7 @@ pipeline {
                         usernameVariable: 'DOCKERHUB_USER',
                         passwordVariable: 'DOCKERHUB_PASS'
                     )]) {
+                        // Build and push the Docker Image
                         sh """
                           docker build -t \$DOCKER_IMAGE .
                           docker login -u \$DOCKERHUB_USER -p \$DOCKERHUB_PASS
@@ -39,12 +40,12 @@ pipeline {
                   sudo apt install -y certbot python3-certbot-nginx nginx
                 """
 
-                // Configure Certbot for the domain (andreyexercise.com)
+                // Authenticate and install certificate
                 sh """
                   sudo certbot --nginx -d andreyexercise.com --non-interactive --agree-tos --email byhalenko@gmail.com
                 """
 
-                // Add minikube Nginx configurations
+                // Add minikube Nginx configurations to sites-available
                 sh '''
                   cat <<EOF | sudo tee /etc/nginx/sites-available/minikube
                   server {
@@ -75,7 +76,7 @@ pipeline {
                   EOF
                 '''
 
-                // Enable the minikube configuration
+                // Add minikube Nginx configurations to sites-enabled and remove the default configurations
                 sh """
                   sudo ln -s /etc/nginx/sites-available/minikube /etc/nginx/sites-enabled/
                   sudo rm -f /etc/nginx/sites-enabled/default
@@ -86,7 +87,7 @@ pipeline {
                   sudo systemctl restart nginx
                 """
 
-                // Apply Kubernetes configurations
+                // Start the POD and Service
                 sh """
                   kubectl apply -f k8s/deployment.yml
                   kubectl apply -f k8s/service.yml
