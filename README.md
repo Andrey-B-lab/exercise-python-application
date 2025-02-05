@@ -19,30 +19,7 @@ This repository contains an **exercise** demonstrating a complete CI/CD workflow
 
 ## Architecture Overview
 
-
-
- ┌───────────────┐       Docker image        ┌───────────────┐
- │  Build Server  │  ──────────────────────>  │  Docker Hub   │
- │ (Ubuntu 24.04) │                           └───────────────┘
- │  Docker Engine │
- └───────────────┘
-            |
-            | Jenkins pipeline triggers
-            v
- ┌────────────────┐
- │ Deploy Server  │
- │ (Ubuntu 24.04) │
- │   Minikube     │
- └────────────────┘
-            |
-        HTTPS (443)
-            v
-     ┌─────────────┐
-     │   Internet  │
-     └─────────────┘
-
-- Route 53 domain points to the EC2 instance hosting Minikube.
-- Nginx is used to expose the application on port 443 with TLS.
+![alt text](https://github.com/Andrey-B-lab/exercise-python-application/blob/development/architecture.png?raw=true)
 
 ---
 
