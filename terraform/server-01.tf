@@ -1,4 +1,4 @@
-resource "aws_instance" "server-01" {
+resource "aws_instance" "docker-server-01" {
   ami           = "ami-0e86e20dae9224db8"
   instance_type = "t2.micro"
   key_name      = var.key_pair_name
