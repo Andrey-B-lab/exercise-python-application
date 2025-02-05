@@ -19,6 +19,8 @@ This repository contains an **exercise** demonstrating a complete CI/CD workflow
 
 ## Architecture Overview
 
+
+
  ┌───────────────┐       Docker image        ┌───────────────┐
  │  Build Server  │  ──────────────────────>  │  Docker Hub   │
  │ (Ubuntu 24.04) │                           └───────────────┘
