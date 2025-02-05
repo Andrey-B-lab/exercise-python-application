@@ -4,7 +4,8 @@ resource "aws_instance" "docker-server-01" {
   key_name      = var.key_pair_name
   
   vpc_security_group_ids = [
-    aws_security_group.jenkins_access.id
+    aws_security_group.jenkins_access.id,
+    aws_security_group.my_ip_ssh.id
   ]
   tags = {
     Name = "docker-server-1"
