@@ -1,11 +1,22 @@
-This is the exercise file for the following pipeline:
+# DevOps Example: Jenkins Pipeline with Docker & Minikube
 
-JenkinsFile that clones the GitHub code to build server-1, build the Docker Image from it, upload it to DockerHub, then run it as a POD on deploy server-2 and expose it on port 443 using Nginx.
+This repository contains an **exercise** demonstrating a complete CI/CD workflow:
 
-I added Sonar Cloud and Snyk tests to the GitHub Actions. Every time new code gets pushed to the Development branch, the test runs.
+- **Jenkinsfile** that clones the code on a build server, builds a Docker image, uploads it to DockerHub, and then deploys the application as a Pod on a separate deploy server (Minikube).
+- **GitHub Actions** (Sonar Cloud & Snyk) run automatically on every push to the `development` branch, ensuring code quality and security checks.
 
-server-1 (build-node-1), Ubuntu 24.04 with Docker installed.
+## Table of Contents
 
-server-2 (deploy-node-1), Ubuntu 24.04 with minikube.
+- [Architecture Overview](#architecture-overview)
+- [Key Components](#key-components)
+- [Workflow Stages](#workflow-stages)
+- [Prerequisites](#prerequisites)
+- [How It Works](#how-it-works)
+- [Reference](#reference)
+- [License](#license)
 
-Route 53 Domain pointed to the server-2 EC2 instance.
+---
+
+## Architecture Overview
+
+┌───────────────┐ Docker image ┌───────────────┐ │ Build Server │ ──────────────────────> │ Docker Hub │ │ (Ubuntu 24.04) │ └───────────────┘ │ Docker Engine │ └───────────────┘ | | Jenkins pipeline triggers v ┌────────────────┐ │ Deploy Server │ │ (Ubuntu 24.04) │ │ Minikube │ └────────────────┘ | HTTPS (443) v ┌─────────────┐ │ Internet │ └─────────────┘
